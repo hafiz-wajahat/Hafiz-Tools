@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Convert images to PDF online with our responsive image to PDF converter. Combine multiple images into a single PDF file.">
+    <meta name="keywords" content="image to PDF, image converter, PDF converter, combine images to PDF">
+    <meta name="author" content="Your Name">
+    <title>Image to PDF Converter</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Converter Tool Section */
+        #converter-tool {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        #converter-tool input[type="file"] {
+            display: none;
+        }
+
+        #converter-tool label {
+            display: block;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        #converter-tool button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        #converter-tool button:disabled {
+            background-color: #a0a0a0;
+            cursor: not-allowed;
+        }
+
+        #converter-tool button:hover:not(:disabled) {
+            background-color: #45a049;
+        }
+
+        /* Image Container */
+        #image-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        #image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Progress Bar */
+        #progress-bar {
+            width: 80%;
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin: 20px auto;
+            overflow: hidden;
+            display: none;
+        }
+
+        #progress {
+            width: 0;
+            height: 100%;
+            background-color: #4CAF50;
+            transition: width 0.3s ease;
+        }
+
+        /* Download Button */
+        #download-btn {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+            display: none;
+            transition: background-color 0.3s ease;
+        }
+
+        #download-btn:hover {
+            background-color: #1e88e5;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 20px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            #converter-tool {
+                padding: 15px;
+            }
+
+            #image-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            #converter-tool button, #download-btn {
+                width: 100%;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Image to PDF Converter</h1>
+    </header>
+    <main>
+        <!-- Ad Space Top -->
+        <section id="ad-space-top">
+            <!-- Google AdSense Ad Unit -->
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_SENSE_ID"
+                    crossorigin="anonymous"></script>
+            <!-- Ad Unit -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_AD_SENSE_ID"
+                 data-ad-slot="1234567890"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </section>
+
+        <!-- Converter Tool -->
+        <section id="converter-tool">
+            <label for="image-input" style="cursor: pointer; background-color: #4CAF50; color: white; padding: 10px 20px; border-radius: 5px; display: inline-block;">
+                Upload Images
+            </label>
+            <input type="file" id="image-input" accept="image/*" multiple>
+            <button id="convert-btn">Convert to PDF</button>
+            <div id="progress-bar">
+                <div id="progress"></div>
+            </div>
+            <div id="image-container"></div>
+            <button id="download-btn">Download PDF</button>
+        </section>
+
+        <!-- Ad Space Bottom -->
+        <section id="ad-space-bottom">
+            <!-- Google AdSense Ad Unit -->
+            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_AD_SENSE_ID"
+                    crossorigin="anonymous"></script>
+            <!-- Ad Unit -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-YOUR_AD_SENSE_ID"
+                 data-ad-slot="0987654321"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 Image to PDF Converter. All rights reserved.</p>
+    </footer>
+
+    <!-- Include pdf-lib library -->
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script>
+        // Function to resize and compress an image
+        async function resizeImage(image, maxWidth = 800, maxHeight = 800) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            let width = image.width;
+            let height = image.height;
+
+            // Resize the image to fit within maxWidth and maxHeight
+            if (width > maxWidth || height > maxHeight) {
+                const ratio = Math.min(maxWidth / width, maxHeight / height);
+                width *= ratio;
+                height *= ratio;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            ctx.drawImage(image, 0, 0, width, height);
+
+            // Convert canvas to Blob
+            return new Promise((resolve) => {
+                canvas.toBlob((blob) => {
+                    resolve(blob);
+                }, 'image/jpeg', 0.8); // Adjust quality here (0.8 = 80%)
+            });
+        }
+
+        // Show selected images
+        document.getElementById('image-input').addEventListener('change', function(e) {
+            const files = e.target.files;
+            const imageContainer = document.getElementById('image-container');
+            imageContainer.innerHTML = '';
+
+            if (files && files.length > 0) {
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.style.display = 'block';
+                        img.style.maxWidth = '200px'; // Limit image size for better UI
+                        imageContainer.appendChild(img);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+
+        // Convert Images to PDF
+        document.getElementById('convert-btn').addEventListener('click', async function() {
+            const fileInput = document.getElementById('image-input');
+            const files = fileInput.files;
+
+            if (files && files.length > 0) {
+                // Disable convert button and show progress bar
+                document.getElementById('convert-btn').disabled = true;
+                document.getElementById('convert-btn').textContent = 'Converting...';
+                document.getElementById('progress-bar').style.display = 'block';
+                document.getElementById('progress').style.width = '0%';
+
+                // Create a new PDF document
+                const { PDFDocument } = PDFLib;
+                const pdfDoc = await PDFDocument.create();
+
+                // Process images sequentially
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+                    const reader = new FileReader();
+                    reader.onload = async function(e) {
+                        const img = new Image();
+                        img.src = e.target.result;
+
+                        img.onload = async () => {
+                            // Resize and compress the image
+                            const resizedBlob = await resizeImage(img);
+                            const resizedArrayBuffer = await resizedBlob.arrayBuffer();
+
+                            // Embed the image in the PDF
+                            const image = await pdfDoc.embedJpg(resizedArrayBuffer);
+                            const page = pdfDoc.addPage([image.width, image.height]);
+                            page.drawImage(image, {
+                                x: 0,
+                                y: 0,
+                                width: image.width,
+                                height: image.height,
+                            });
+
+                            // Update progress bar
+                            const progress = ((i + 1) / files.length) * 100;
+                            document.getElementById('progress').style.width = `${progress}%`;
+
+                            // If all images are processed, enable download button
+                            if (i === files.length - 1) {
+                                const pdfBytes = await pdfDoc.save();
+                                const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
+
+                                // Enable download button
+                                document.getElementById('download-btn').style.display = 'block';
+                                document.getElementById('download-btn').onclick = function() {
+                                    const link = document.createElement('a');
+                                    link.href = URL.createObjectURL(pdfBlob);
+                                    link.download = 'converted-images.pdf';
+                                    link.click();
+                                };
+
+                                // Reset convert button
+                                document.getElementById('convert-btn').disabled = false;
+                                document.getElementById('convert-btn').textContent = 'Convert to PDF';
+                            }
+                        };
+                    };
+                    reader.readAsDataURL(file);
+                }
+            } else {
+                alert('Please select at least one image to convert.');
+            }
+        });
+    </script>
+</body>
+</html>
