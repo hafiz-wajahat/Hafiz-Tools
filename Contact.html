@@ -3,29 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us</title>
+    <meta name="description" content="Contact Hafiz Tools for support, feedback, or inquiries.">
+    <meta name="keywords" content="contact us, Hafiz Tools, support, feedback">
+    <meta name="author" content="Your Name">
+    <title>Contact Us - Hafiz Tools</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); text-align: center; }
-        h1 { color: #333; }
-        form { margin-top: 20px; }
-        input, textarea { width: 100%; padding: 10px; margin-top: 10px; border: 1px solid #ccc; }
-        button { background: #333; color: white; padding: 10px; border: none; cursor: pointer; }
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            color: #4CAF50;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, textarea {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
-
-    <div class="container">
+    <header>
         <h1>Contact Us</h1>
-        <p>If you have any questions, feel free to email us at <strong>acbgmail.com</strong>.</p>
-        
+    </header>
+    <main>
+        <h2>Get in Touch</h2>
+        <p>Have questions or feedback? We'd love to hear from you! Fill out the form below, and we'll get back to you as soon as possible.</p>
+
         <form>
-            <input type="text" placeholder="Your Name" required>
-            <input type="email" placeholder="princewajahat697@gmail.com" required>
-            <textarea placeholder="Your Message" rows="5" required></textarea>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" rows="5" required></textarea>
+
             <button type="submit">Send Message</button>
         </form>
-    </div>
-
+    </main>
+    <footer>
+        <p>&copy; 2023 Hafiz Tools. All rights reserved.</p>
+    </footer>
 </body>
 </html>
