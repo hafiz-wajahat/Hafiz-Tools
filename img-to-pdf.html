@@ -1,211 +1,108 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image to PDF Converter</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background-color: #f4f4f4;
-        }
-        header {
-            background: #4CAF50;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        main {
-            max-width: 800px;
-            margin: auto;
-            padding: 20px;
-        }
-        #converter-tool {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0 0 10px rgba(0,0,0,0.05);
-        }
-        #image-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 20px;
-            justify-content: center;
-        }
-        #image-container img {
-            max-width: 150px;
-            border-radius: 5px;
-            box-shadow: 0 0 5px rgba(0,0,0,0.1);
-        }
-        button, label.upload-btn {
-            margin-top: 15px;
-            display: inline-block;
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover, label.upload-btn:hover {
-            background-color: #45a049;
-        }
-        button:disabled {
-            background-color: #aaa;
-            cursor: not-allowed;
-        }
-        #progress-bar {
-            width: 80%;
-            height: 10px;
-            background: #ddd;
-            border-radius: 5px;
-            margin: 20px auto;
-            display: none;
-        }
-        #progress {
-            height: 100%;
-            width: 0;
-            background: #4CAF50;
-            border-radius: 5px;
-            transition: width 0.3s;
-        }
-        #download-btn {
-            display: none;
-            background-color: #2196F3;
-        }
-        #download-btn:hover {
-            background-color: #1976d2;
-        }
-        @media (max-width: 600px) {
-            #image-container {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>Image to PDF Converter</h1>
-    </header>
-    <main>
-        <section id="converter-tool">
-            <label for="image-input" class="upload-btn">Upload Images</label>
-            <input type="file" id="image-input" accept="image/*" multiple style="display: none;">
-            <br>
-            <button id="convert-btn">Convert to PDF</button>
-            <div id="progress-bar"><div id="progress"></div></div>
-            <div id="image-container"></div>
-            <button id="download-btn">Download PDF</button>
-        </section>
-    </main>
-    <footer style="text-align:center; padding: 10px; background:#333; color:white;">
-        &copy; 2024 Image to PDF Converter
-    </footer>
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script>
+    const imageInput = document.getElementById('image-input');
+    const imageContainer = document.getElementById('image-container');
+    const convertBtn = document.getElementById('convert-btn');
+    const progressBar = document.getElementById('progress-bar');
+    const progress = document.getElementById('progress');
+    const downloadBtn = document.getElementById('download-btn');
 
-    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-    <script>
-        const imageInput = document.getElementById('image-input');
-        const imageContainer = document.getElementById('image-container');
-        const convertBtn = document.getElementById('convert-btn');
-        const progressBar = document.getElementById('progress-bar');
-        const progress = document.getElementById('progress');
-        const downloadBtn = document.getElementById('download-btn');
+    let finalPdfBlob = null;  // <-- Store the PDF blob here globally
 
-        imageInput.addEventListener('change', (e) => {
-            imageContainer.innerHTML = '';
-            const files = e.target.files;
-            Array.from(files).forEach(file => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    imageContainer.appendChild(img);
-                };
-                reader.readAsDataURL(file);
-            });
-        });
-
-        convertBtn.addEventListener('click', async () => {
-            const files = imageInput.files;
-            if (files.length === 0) {
-                alert('Please select images first.');
-                return;
-            }
-
-            convertBtn.disabled = true;
-            convertBtn.textContent = 'Converting...';
-            progressBar.style.display = 'block';
-            progress.style.width = '0%';
-            downloadBtn.style.display = 'none';
-
-            const { PDFDocument } = PDFLib;
-            const pdfDoc = await PDFDocument.create();
-
-            for (let i = 0; i < files.length; i++) {
-                const file = files[i];
-                const imgDataUrl = await fileToDataURL(file);
-                const img = await loadImage(imgDataUrl);
-                const blob = await resizeAndCompress(img);
-                const arrayBuffer = await blob.arrayBuffer();
-                const pdfImage = await pdfDoc.embedJpg(arrayBuffer);
-                const page = pdfDoc.addPage([pdfImage.width, pdfImage.height]);
-                page.drawImage(pdfImage, {
-                    x: 0,
-                    y: 0,
-                    width: pdfImage.width,
-                    height: pdfImage.height
-                });
-                progress.style.width = `${((i + 1) / files.length) * 100}%`;
-            }
-
-            const pdfBytes = await pdfDoc.save();
-            const pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
-
-            downloadBtn.style.display = 'inline-block';
-            downloadBtn.onclick = () => {
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(pdfBlob);
-                link.download = 'images-to-pdf.pdf';
-                link.click();
+    imageInput.addEventListener('change', (e) => {
+        imageContainer.innerHTML = '';
+        const files = e.target.files;
+        Array.from(files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                imageContainer.appendChild(img);
             };
-
-            convertBtn.disabled = false;
-            convertBtn.textContent = 'Convert to PDF';
+            reader.readAsDataURL(file);
         });
+    });
 
-        function fileToDataURL(file) {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onload = (e) => resolve(e.target.result);
-                reader.readAsDataURL(file);
-            });
+    convertBtn.addEventListener('click', async () => {
+        const files = imageInput.files;
+        if (files.length === 0) {
+            alert('Please select images first.');
+            return;
         }
 
-        function loadImage(src) {
-            return new Promise((resolve) => {
-                const img = new Image();
-                img.onload = () => resolve(img);
-                img.src = src;
+        convertBtn.disabled = true;
+        convertBtn.textContent = 'Converting...';
+        progressBar.style.display = 'block';
+        progress.style.width = '0%';
+        downloadBtn.style.display = 'none';
+        finalPdfBlob = null;  // Reset before conversion
+
+        const { PDFDocument } = PDFLib;
+        const pdfDoc = await PDFDocument.create();
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const imgDataUrl = await fileToDataURL(file);
+            const img = await loadImage(imgDataUrl);
+            const blob = await resizeAndCompress(img);
+            const arrayBuffer = await blob.arrayBuffer();
+            const pdfImage = await pdfDoc.embedJpg(arrayBuffer);
+            const page = pdfDoc.addPage([pdfImage.width, pdfImage.height]);
+            page.drawImage(pdfImage, {
+                x: 0,
+                y: 0,
+                width: pdfImage.width,
+                height: pdfImage.height
             });
+            progress.style.width = `${((i + 1) / files.length) * 100}%`;
         }
 
-        function resizeAndCompress(image, maxWidth = 800, maxHeight = 800) {
-            return new Promise((resolve) => {
-                let { width, height } = image;
-                const scale = Math.min(maxWidth / width, maxHeight / height, 1);
-                width *= scale;
-                height *= scale;
-                const canvas = document.createElement('canvas');
-                canvas.width = width;
-                canvas.height = height;
-                canvas.getContext('2d').drawImage(image, 0, 0, width, height);
-                canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 0.85);
-            });
+        const pdfBytes = await pdfDoc.save();
+        finalPdfBlob = new Blob([pdfBytes], { type: 'application/pdf' }); // Save PDF blob
+
+        downloadBtn.style.display = 'inline-block';
+        convertBtn.disabled = false;
+        convertBtn.textContent = 'Convert to PDF';
+    });
+
+    downloadBtn.addEventListener('click', () => {
+        if (finalPdfBlob) {
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(finalPdfBlob);
+            link.download = 'images-to-pdf.pdf';
+            link.click();
+        } else {
+            alert('No PDF available to download. Please convert first.');
         }
-    </script>
-</body>
-</html>
+    });
+
+    function fileToDataURL(file) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function loadImage(src) {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.onload = () => resolve(img);
+            img.src = src;
+        });
+    }
+
+    function resizeAndCompress(image, maxWidth = 800, maxHeight = 800) {
+        return new Promise((resolve) => {
+            let { width, height } = image;
+            const scale = Math.min(maxWidth / width, maxHeight / height, 1);
+            width *= scale;
+            height *= scale;
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            canvas.getContext('2d').drawImage(image, 0, 0, width, height);
+            canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 0.85);
+        });
+    }
+</script>
